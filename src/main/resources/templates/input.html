@@ -1,69 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Resume</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
-    <h1 class="text-2xl font-bold mb-6 text-center">Create Your Harvard-Style Resume</h1>
-    <form action="/api/resume" method="post" class="space-y-4">
-        <div>
-            <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
-            <input type="text" name="name" id="name" required
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+    <h1 class="text-2xl font-bold mb-6">Create Your Harvard-Style Resume</h1>
+    <form th:action="@{/api/resume}" method="post">
+        <!-- CSRF Token -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div class="mb-4">
+            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+            <input type="text" id="name" name="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
         </div>
-        <div>
+        <div class="mb-4">
             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" name="email" id="email" required
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <input type="email" id="email" name="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
         </div>
-        <div>
-            <label for="education" class="block text-sm font-medium text-gray-700">Education (one entry per line)</label>
-            <textarea name="education" id="education" rows="4"
-                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                      placeholder="e.g., B.S. in Computer Science, XYZ University, 2020"></textarea>
+        <div class="mb-4">
+            <label for="education" class="block text-sm font-medium text-gray-700">Education (one per line)</label>
+            <textarea id="education" name="education" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
         </div>
-        <div>
-            <label for="experience" class="block text-sm font-medium text-gray-700">Experience (one entry per line)</label>
-            <textarea name="experience" id="experience" rows="4"
-                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                      placeholder="e.g., Software Engineer, ABC Corp, 2021-2023"></textarea>
+        <div class="mb-4">
+            <label for="experience" class="block text-sm font-medium text-gray-700">Experience (one per line)</label>
+            <textarea id="experience" name="experience" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
         </div>
-        <div>
-            <label for="skills" class="block text-sm font-medium text-gray-700">Skills (one entry per line)</label>
-            <textarea name="skills" id="skills" rows="4"
-                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                      placeholder="e.g., Java, Python, Spring Boot"></textarea>
+        <div class="mb-4">
+            <label for="skills" class="block text-sm font-medium text-gray-700">Skills (one per line)</label>
+            <textarea id="skills" name="skills" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
         </div>
-        <div>
-            <label for="publications" class="block text-sm font-medium text-gray-700">Publications (one entry per line)</label>
-            <textarea name="publications" id="publications" rows="4"
-                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                      placeholder="e.g., 'A Study on AI,' Journal of Tech, 2022"></textarea>
+        <div class="mb-4">
+            <label for="publications" class="block text-sm font-medium text-gray-700">Publications (one per line)</label>
+            <textarea id="publications" name="publications" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
         </div>
-        <div>
-            <label for="awards" class="block text-sm font-medium text-gray-700">Awards (one entry per line)</label>
-            <textarea name="awards" id="awards" rows="4"
-                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                      placeholder="e.g., Best Coder Award, Hackathon 2021"></textarea>
+        <div class="mb-4">
+            <label for="awards" class="block text-sm font-medium text-gray-700">Awards (one per line)</label>
+            <textarea id="awards" name="awards" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
         </div>
-        <div>
-            <label for="extraTitle" class="block text-sm font-medium text-gray-700">Extras Section Title</label>
-            <input type="text" name="extraTitle" id="extraTitle"
-                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                   placeholder="e.g., Projects, Certifications">
+        <div class="mb-4">
+            <label for="extraTitle" class="block text-sm font-medium text-gray-700">Extra Section Title</label>
+            <input type="text" id="extraTitle" name="extraTitle" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
         </div>
-        <div>
-            <label for="extraPoints" class="block text-sm font-medium text-gray-700">Extras Content (one entry per line)</label>
-            <textarea name="extraPoints" id="extraPoints" rows="4"
-                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                      placeholder="e.g., Developed a web app using Spring Boot"></textarea>
+        <div class="mb-4">
+            <label for="extraPoints" class="block text-sm font-medium text-gray-700">Extra Section Points (one per line)</label>
+            <textarea id="extraPoints" name="extraPoints" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
         </div>
-        <button type="submit"
-                class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">Submit</button>
+        <button type="submit" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">Create Resume</button>
     </form>
 </div>
 </body>

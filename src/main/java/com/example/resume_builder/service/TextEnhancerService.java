@@ -1,75 +1,61 @@
 package com.example.resume_builder.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Service
 public class TextEnhancerService {
     private final WebClient webClient;
-    private final ObjectMapper objectMapper;
 
-    @Value("${huggingface.api.token}")
-    private String apiToken;
-
-    public TextEnhancerService(WebClient.Builder webClient) {
-        this.webClient = webClient.baseUrl("https://api-inference.huggingface.co").build();
-        this.objectMapper = new ObjectMapper();
+    public TextEnhancerService(@Value("${xai.api.token}") String apiToken) {
+        this.webClient = WebClient.builder()
+                .baseUrl("https://api.x.ai/v1")
+                .defaultHeader("Authorization", "Bearer " + apiToken)
+                .defaultHeader("Content-Type", "application/json")
+                .build();
     }
 
-    public String enhanceText(String inputText) {
-        if (inputText == null || inputText.trim().isEmpty()) {
+    public String enhanceText(String text) {
+        if (text == null || text.trim().isEmpty()) {
             return "";
         }
-        String prompt = "Transform the following text into professional CV bullet points in English: " + inputText;
-        try {
-            String response = webClient.post()
-                    .uri("/models/gpt2")
-                    .header("Authorization", "Bearer " + apiToken)
-                    .bodyValue(new TextInput(prompt))
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
-            return extractEnhancedText(response);
-        } catch (Exception e) {
-            return inputText;
-        }
-    }
-
-    private String extractEnhancedText(String response) {
-        try {
-            JsonNode jsonNode = objectMapper.readTree(response);
-            // Extract just the generated text from the response
-            if (jsonNode.isArray() && !jsonNode.isEmpty()) {
-                JsonNode firstResult = jsonNode.get(0);
-                if (firstResult.has("generated_text")) {
-                    String generatedText = firstResult.get("generated_text").asText();
-                    // Extract only the enhanced part after the prompt
-                    int promptEndIndex = generatedText.indexOf(": ") + 2;
-                    if (promptEndIndex > 2 && promptEndIndex < generatedText.length()) {
-                        generatedText = generatedText.substring(promptEndIndex);
+        String prompt = "Rewrite for a Harvard-style CV: use strong action verbs (e.g., Developed, Led), avoid personal pronouns, quantify achievements (e.g., 'by 20%'), ensure professional tone. Input: " + text;
+        String requestBody = """
+            {
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You are a professional CV enhancement assistant."
+                    },
+                    {
+                        "role": "user",
+                        "content": "%s"
                     }
-                    return generatedText.trim();
-                }
+                ],
+                "model": "grok-3-latest",
+                "stream": false,
+                "temperature": 0
             }
-            return response.trim();
-        } catch (Exception e) {
-            // If JSON parsing fails, just clean up the raw response
-            return response.replaceAll("\\[\\{\"[^\"]+\":\"([^\"]+)\"}]", "$1").trim();
-        }
-    }
+            """.formatted(prompt.replace("\"", "\\\""));
 
-    static class TextInput {
-        private String inputs;
+        Mono<String> response = webClient.post()
+                .uri("/chat/completions")
+                .bodyValue(requestBody)
+                .retrieve()
+                .bodyToMono(String.class);
 
-        public TextInput(String inputs) {
-            this.inputs = inputs;
+        // Parse the JSON response to extract the content
+        String rawResponse = response.block();
+        if (rawResponse != null) {
+            // Simple JSON parsing to extract "content" from the first choice
+            int contentStart = rawResponse.indexOf("\"content\":\"") + 11;
+            int contentEnd = rawResponse.indexOf("\"", contentStart);
+            if (contentStart > 10 && contentEnd > contentStart) {
+                return rawResponse.substring(contentStart, contentEnd).replace("\\n", "\n").trim();
+            }
         }
-
-        public String getInputs() {
-            return inputs;
-        }
+        return text; // Fallback to original text if parsing fails
     }
 }
