@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Resume</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
+    <h1 class="text-2xl font-bold mb-6 text-center">Create Your Harvard-Style Resume</h1>
+    <form action="/api/resume" method="post" class="space-y-4">
+        <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+            <input type="text" name="name" id="name" required
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+        </div>
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" name="email" id="email" required
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+        </div>
+        <div>
+            <label for="education" class="block text-sm font-medium text-gray-700">Education (one entry per line)</label>
+            <textarea name="education" id="education" rows="4"
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="e.g., B.S. in Computer Science, XYZ University, 2020"></textarea>
+        </div>
+        <div>
+            <label for="experience" class="block text-sm font-medium text-gray-700">Experience (one entry per line)</label>
+            <textarea name="experience" id="experience" rows="4"
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="e.g., Software Engineer, ABC Corp, 2021-2023"></textarea>
+        </div>
+        <div>
+            <label for="skills" class="block text-sm font-medium text-gray-700">Skills (one entry per line)</label>
+            <textarea name="skills" id="skills" rows="4"
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="e.g., Java, Python, Spring Boot"></textarea>
+        </div>
+        <div>
+            <label for="publications" class="block text-sm font-medium text-gray-700">Publications (one entry per line)</label>
+            <textarea name="publications" id="publications" rows="4"
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="e.g., 'A Study on AI,' Journal of Tech, 2022"></textarea>
+        </div>
+        <div>
+            <label for="awards" class="block text-sm font-medium text-gray-700">Awards (one entry per line)</label>
+            <textarea name="awards" id="awards" rows="4"
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="e.g., Best Coder Award, Hackathon 2021"></textarea>
+        </div>
+        <div>
+            <label for="extraTitle" class="block text-sm font-medium text-gray-700">Extras Section Title</label>
+            <input type="text" name="extraTitle" id="extraTitle"
+                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                   placeholder="e.g., Projects, Certifications">
+        </div>
+        <div>
+            <label for="extraPoints" class="block text-sm font-medium text-gray-700">Extras Content (one entry per line)</label>
+            <textarea name="extraPoints" id="extraPoints" rows="4"
+                      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="e.g., Developed a web app using Spring Boot"></textarea>
+        </div>
+        <button type="submit"
+                class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">Submit</button>
+    </form>
+</div>
+</body>
+</html>

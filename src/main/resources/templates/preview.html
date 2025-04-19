@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Preview</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
+    <h1 th:text="${resume.name}" class="text-2xl font-bold mb-2"></h1>
+    <p th:text="${resume.email}" class="text-gray-600 mb-4"></p>
+    <h2 class="text-lg font-bold uppercase mt-4 mb-2">Education</h2>
+    <ul class="list-disc pl-5">
+        <li th:each="point : ${resume.education != null} ? ${resume.education.split('\n')} : ${#arrays.arrayOf('')}"
+            th:text="${point}"
+            th:class="${point} ? 'block' : 'hidden'"></li>
+    </ul>
+    <h2 class="text-lg font-bold uppercase mt-4 mb-2">Experience</h2>
+    <ul class="list-disc pl-5">
+        <li th:each="point : ${resume.experience != null} ? ${resume.experience.split('\n')} : ${#arrays.arrayOf('')}"
+            th:text="${point}"
+            th:class="${point} ? 'block' : 'hidden'"></li>
+    </ul>
+    <h2 class="text-lg font-bold uppercase mt-4 mb-2">Skills</h2>
+    <ul class="list-disc pl-5">
+        <li th:each="point : ${resume.skills != null} ? ${resume.skills.split('\n')} : ${#arrays.arrayOf('')}"
+            th:text="${point}"
+            th:class="${point} ? 'block' : 'hidden'"></li>
+    </ul>
+    <h2 class="text-lg font-bold uppercase mt-4 mb-2">Publications</h2>
+    <ul class="list-disc pl-5">
+        <li th:each="point : ${resume.publications != null} ? ${resume.publications.split('\n')} : ${#arrays.arrayOf('')}"
+            th:text="${point}"
+            th:class="${point} ? 'block' : 'hidden'"></li>
+    </ul>
+    <h2 class="text-lg font-bold uppercase mt-4 mb-2">Awards</h2>
+    <ul class="list-disc pl-5">
+        <li th:each="point : ${resume.awards != null} ? ${resume.awards.split('\n')} : ${#arrays.arrayOf('')}"
+            th:text="${point}"
+            th:class="${point} ? 'block' : 'hidden'"></li>
+    </ul>
+    <h2 th:if="${resume.extraTitle != null and !resume.extraTitle.isEmpty}"
+        th:text="${resume.extraTitle.toUpperCase()}"
+        class="text-lg font-bold uppercase mt-4 mb-2"></h2>
+    <ul class="list-disc pl-5" th:if="${resume.extraPoints != null and !resume.extraPoints.isEmpty}">
+        <li th:each="point : ${resume.extraPoints != null} ? ${resume.extraPoints.split('\n')} : ${#arrays.arrayOf('')}"
+            th:text="${point}"
+            th:class="${point} ? 'block' : 'hidden'"></li>
+    </ul>
+    <div class="mt-6 flex space-x-4">
+        <a th:href="@{'/api/resume/download?id=' + ${resume.id} + '&format=pdf'}"
+           class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">Download PDF</a>
+        <a th:href="@{'/api/resume/download?id=' + ${resume.id} + '&format=docx'}"
+           class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">Download DOCX</a>
+    </div>
+</div>
+</body>
+</html>
